@@ -6,6 +6,7 @@ type Transaction struct {
 	Quantity  int       `json:"quantity"`
 }
 
-type TransactionTax struct {
-	Tax float64 `json:"tax"`
+type TransactionReturn struct {
+	Tax   float64
+	Error error
 }

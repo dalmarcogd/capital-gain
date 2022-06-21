@@ -14,7 +14,7 @@ func Test_calculator_Calc(t *testing.T) {
 	var tests = []struct {
 		name string
 		args args
-		want []TransactionTax
+		want []TransactionReturn
 	}{
 		{
 			name: "case 1",
@@ -38,7 +38,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -72,7 +72,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -106,7 +106,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -140,7 +140,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -179,7 +179,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -226,7 +226,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -296,7 +296,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -353,7 +353,7 @@ func Test_calculator_Calc(t *testing.T) {
 					},
 				},
 			},
-			want: []TransactionTax{
+			want: []TransactionReturn{
 				{
 					Tax: 0.00,
 				},
@@ -365,6 +365,66 @@ func Test_calculator_Calc(t *testing.T) {
 				},
 				{
 					Tax: 60000.00,
+				},
+			},
+		},
+		{
+			name: "case 9",
+			args: args{
+				ctx: context.Background(),
+				trxs: []Transaction{
+					{
+						Operation: Buy,
+						UnitCost:  10.00,
+						Quantity:  10000,
+					},
+					{
+						Operation: Sell,
+						UnitCost:  20.00,
+						Quantity:  11000,
+					},
+				},
+			},
+			want: []TransactionReturn{
+				{
+					Tax: 0,
+				},
+				{
+					Error: ErrInsufficientQuantity,
+				},
+			},
+		},
+		{
+			name: "case 10",
+			args: args{
+				ctx: context.Background(),
+				trxs: []Transaction{
+					{
+						Operation: Buy,
+						UnitCost:  10.00,
+						Quantity:  10000,
+					},
+					{
+						Operation: Sell,
+						UnitCost:  20.00,
+						Quantity:  11000,
+					},
+					{
+						Operation: Sell,
+						UnitCost:  20.00,
+						Quantity:  5000,
+					},
+				},
+			},
+			want: []TransactionReturn{
+				{
+					Tax: 0,
+				},
+				{
+					Error: ErrInsufficientQuantity,
+				},
+				{
+					Tax: 10000,
 				},
 			},
 		},
